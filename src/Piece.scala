@@ -7,13 +7,12 @@ class Piece {
   var isWhite: Boolean = false
   var pieceName: String = null
 
-  def this(xp: Int, yp: Int, isWhite: Boolean, pieceName: String, ps: util.LinkedList[Piece]) {
+  def this(xp: Int, yp: Int, isWhite: Boolean, pieceName: String) {
     this()
     this.xp = xp
     this.yp = yp
     this.isWhite = isWhite
     this.pieceName = pieceName
-    ps.add(this);
   }
 
   def getPieces: util.LinkedList[Piece] = {
