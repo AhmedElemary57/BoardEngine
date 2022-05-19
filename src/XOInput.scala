@@ -1,5 +1,3 @@
-import BoardEngine.setInitialState
-
 object XOInput extends Input{
 
   override var input: String = _
@@ -8,7 +6,9 @@ object XOInput extends Input{
 
   override def setInput(input: String): Boolean = {
     val validInput = List(1,2,3).flatMap(number => List('a', 'b', 'c').map(letter => s"$number$letter"))
-    validInput.contains(input)
+    val res = validInput.contains(input)
+    if(res) this.input = input
+    res
   }
 
   def main(args: Array[String]): Unit = {

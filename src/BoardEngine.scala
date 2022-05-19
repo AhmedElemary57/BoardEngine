@@ -1,28 +1,26 @@
-import java.util
-
 object BoardEngine{
 
   var turn = 0    //start turn with player 1
-  //var input
-var ps=new util.LinkedList[Piece];
-  def setInitialState(x:Int): util.LinkedList[Piece] = x match {
-    case 0 =>XO.ps;
-    case 1 =>Chess.ps;
-    case 2=>Connect4.ps;
-    case _=>Checkers.ps;
+
+  var ps: List[Piece] = List()
+
+  def setInitialState(x: Int): List[Piece] = x match {
+    case 0 => XO.ps;
+    case 1 => Chess.ps;
+    case 2 => Connect4.ps;
+    case _ => Checkers.ps;
   }
 
   def selectDrawer(x:Int): Unit = x match {
     case 0 =>xoDrawer();
     case 1 =>chessDrawer();
-    case 2=>connect4Drawer();
-    case _=>checkersDrawer();
+    case 2 =>connect4Drawer();
+    case _ =>checkersDrawer();
   }
 
   def start(i: Int): Unit ={
-    ps =setInitialState(i)
+    ps = setInitialState(i)
     selectDrawer(i)
-
   }
 
 
@@ -48,16 +46,11 @@ var ps=new util.LinkedList[Piece];
     //the bo
   }
 
-
-
   def main(args: Array[String]): Unit = {
     while (true) {
       println("select a game 0,1,2,3")
-
       val a = scala.io.StdIn.readInt();
-      start(a);
+      start(a)
+    }
   }
-  }
-
-
 }

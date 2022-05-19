@@ -1,4 +1,3 @@
-import java.util
 import javax.imageio.ImageIO
 import java.awt.Image
 import java.awt.image.BufferedImage
@@ -12,8 +11,8 @@ import javax.swing.JPanel
 class Board {
  // ublic void draw(int xMax , int yMax , int shape , int bw)
 
-  def draw(xMax:Int ,yMax:Int ,shape: Int , wb: Int,game:String,pieces:util.LinkedList[Piece]): Unit ={
-    val all = ImageIO.read(new File(s"D:\\$game.png"))
+  def draw(xMax:Int ,yMax:Int ,shape: Int , wb: Int,game:String, pieces: List[Piece]): Unit = {
+    val all = ImageIO.read(new File(s".\\utils\\$game.png"))
     val imgs = new Array[Image](12)
     var ind = 0
     var y = 0
@@ -45,23 +44,23 @@ class Board {
             else g.fill3DRect(x * 64, y * 64, 64, 64, true)
           }
         }
-        for (i<-0  until pieces.size()) {
+        for (i <- pieces.indices) {
           var ind = 0
           if (game.equals("chess")){
             ind=Chess.chessPieces(i,ind)
           }
           else if (game.equals("xo")){
-            if (pieces.get(i).pieceName.equals("X"))
+            if (pieces(i).pieceName.equals("X"))
               ind=0;
             else ind=1
           }
           else if (game.equals("checkers")){
-            if (pieces.get(i).pieceName.equals("X"))
+            if (pieces(i).pieceName.equals("X"))
               ind=0;
             else ind=1
           }
 
-          g.drawImage( imgs(ind%12), pieces.get(i).xp * 64 , pieces.get(i).yp * 64,this)
+          g.drawImage( imgs(ind%12), pieces(i).xp * 64 , pieces(i).yp * 64,this)
 
         }
         // g.drawString("R", 64, 64);

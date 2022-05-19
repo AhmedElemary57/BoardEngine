@@ -1,12 +1,9 @@
-import java.util
-
 object Connect4 {
-  var ps=new util.LinkedList[Piece]
+  var ps:List[Piece] = List()
 
-  def play(xp: Int, pieceName: String, ps: util.LinkedList[Piece]): Unit ={
-    var i=0;
+  def play(xp: Int, pieceName: String, ps: List[Piece]): Unit ={
+    var i = 0
 
-    ps.add(new Piece(xp,5,true,pieceName))
+    ps :+ new Piece(xp,5,true,pieceName)
   }
-
 }
