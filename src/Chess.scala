@@ -6,7 +6,10 @@ object Chess {
   def isUpper(x: Char): Boolean = x >= 'A' && x <= 'Z'
 
   def isLower(x: Char): Boolean = x >= 'a' && x <= 'z'
-
+  def initialState(): Array[Array[Char]] ={
+    board = Array(Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'), Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('P', '.', '.', '.', '.', '.', '.', '.'), Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'), Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
+    board
+  }
   def changeType(x: Char, y: Char, n: Int): Boolean = {
     if (isLower(x) && n == 0) return isUpper(y)
     else if (isLower(x) && n == 1) return isLower(y)
