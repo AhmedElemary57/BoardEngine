@@ -7,7 +7,8 @@ import java.io.File
 import javax.swing.JFrame
 import javax.swing.JPanel
 
-class Board {
+object Board {
+
   /**
    * Draw the initial board dynamically
    * @param xMax the board width
@@ -17,7 +18,7 @@ class Board {
    * @param game represents the game type
    * @param pieces the pieces to be drawn on board
    * */
-  def draw(xMax:Int ,yMax:Int ,shape: Int , wb: Int, game:String, pieces: Array[Array[String]]): Unit = {
+  def draw(xMax:Int ,yMax:Int ,shape: Int , wb: Int, game:String, pieces: Array[Array[Char]]): Unit = {
     val all = ImageIO.read(new File(s".\\utils\\$game.png"))
     val imgs = new Array[Image](12)
     var ind = 0
@@ -34,7 +35,8 @@ class Board {
     }
 
     var frame = new JFrame(s"$game");
-    frame.setBounds(10,10,512*xMax/8,512*yMax/8);
+    frame.setSize(700,700)
+  //  frame.setBounds(10,10,512*xMax/8,512*yMax/8);
     //frame.setUndecorated(true)
     val pn = new JPanel() {
       override def paint(g: Graphics): Unit = {
@@ -50,24 +52,24 @@ class Board {
 
         for (i <- pieces.indices) {
           for(j <- pieces(0).indices){
-            if(!pieces(i)(j).equals("_")){
+            if(!pieces(i)(j).equals('.')){
               var ind = 0
               if (game.equals("chess")){
-                ind = Chess.chessPieces(i, ind)
+                ind = Chess.chessPieces(pieces(i)(j))
               }
               else if (game.equals("xo")){
-                if (pieces(i)(j).equals("X")) ind = 0
-                else ind = 1
+                if (pieces(i)(j).equals('x')) ind = 0
+                else if (pieces(i)(j).equals('o')) ind = 1
               }
               else if (game.equals("checkers")){
                 if (pieces(i)(j).equals("X")) ind = 0
                 else ind = 1
               }
               else if(game.equals("connect4")){
-                if (pieces(i)(j).equals("R")) ind = 0
-                else ind = 1
+                if (pieces(i)(j).equals('r')) ind = 0
+                else if (pieces(i)(j).equals('y')) ind = 1
               }
-              g.drawImage( imgs(ind%12), j * 64 , i * 64,this)
+              g.drawImage( imgs(ind%12) , j * 64  , i * 64 ,this)
             }
           }
         }

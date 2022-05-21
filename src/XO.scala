@@ -1,9 +1,11 @@
 object XO {
 
-  var ps:List[Piece] = List()
+  var ps:Array[Array[Char]] =Array(Array('.','x','.'),Array('.','o','.'),Array('.','.','.'))
 
-  def play(xp: Int, yp: Int, pieceName: String, ps: List[Piece]): Unit ={
-    ps :+ new Piece(xp,yp,true,pieceName)
+
+
+  def play(xp: Int, yp: Int, pieceName: Char): Unit ={
+    ps(xp)(yp)=pieceName
   }
 
 

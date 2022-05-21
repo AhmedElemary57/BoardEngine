@@ -1,41 +1,37 @@
-object BoardEngine{
+object BoardEngine {
 
-  var isPlayerOne: Boolean = true     //start turn with player 1
+  var isPlayerOne: Boolean = true //start turn with player 1
 
   var state: Array[Array[Char]] = null
 
-//  def setInitialState(x: Int): List[Piece] = x match {
-//    case 0 => XO.ps;
-//    case 1 => Chess.ps;
-//    case 2 => Connect4.ps;
-//    case _ => Checkers.ps;
-//  }
-//
-//  def selectDrawer(x:Int): Unit = x match {
-//    case 0 =>xoDrawer();
-//    case 1 =>chessDrawer();
-//    case 2 =>connect4Drawer();
-//    case _ =>checkersDrawer();
-//  }
-//
-//  def start(i: Int): Unit ={
-//    ps = setInitialState(i)
-//    selectDrawer(i)
-//  }
-//
+    def setInitialState(x: Int): Array[Array[Char]] = x match {
+      case 0 => XO.ps;
+     case 1 => Chess.board;
+      case 2 => Connect4.ps;
+
+}
+  def selectDrawer(x:Int): Unit = x match {
+    case 0 =>xoDrawer();
+    case 1 =>chessDrawer();
+    case 2 =>connect4Drawer();
+   //case _ =>checkersDrawer();
+  }
+
+  def start(i: Int): Unit ={
+    state = setInitialState(i)
+    selectDrawer(i)
+  }
+
 
   def xoDrawer(): Unit ={
-    var board = new Board
-   board.draw(3,3,1,0,"xo",state)
+   Board.draw(3,3,1,0,"xo",state)
   }
-//  def chessDrawer( ): Unit ={
-//    var b = new Board;
-//    b.draw(8,8,1,1,"chess",ps)/*,here we should but the shapes 'state to be drawn'*/
-//    //the bo
-//  }
+  def chessDrawer( ): Unit ={
+    Board.draw(8,8,1,1,"chess",state)/*,here we should but the shapes 'state to be drawn'*/
+    //the bo
+  }
   def connect4Drawer( ): Unit ={
-    var board = new Board;
-    board.draw(7,6,0,0,"connect4", state)
+    Board.draw(7,6,0,0,"connect4", state)
     //the bo
 
   }
@@ -120,14 +116,17 @@ object BoardEngine{
   }
 
   def main(args: Array[String]): Unit = {
-//    while (true) {
-//      println("select a game 0,1,2,3")
-//      val a = scala.io.StdIn.readInt();
-//      start(a)
-//    }
+    while (true) {
+      println("select a game 0,1,2,3")
+      val a = scala.io.StdIn.readInt();
+      start(a)
+
+
+
+    }
 
 //    state = Array(Array("X", "_", "O"), Array("O", "X", "_"), Array("O", "_", "X"))
-    state = Array(
+   /* state = Array(
       Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'),
       Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'),
       Array('.', '.', '.', '.', '.', '.', '.', '.'),
@@ -141,6 +140,6 @@ object BoardEngine{
 //    xoDrawer()
 //    connect4Drawer()
     val x =chessController("8a 4a")
-    println(x)
+    println(x)*/
   }
 }

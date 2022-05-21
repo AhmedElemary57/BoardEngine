@@ -1,9 +1,14 @@
 object Connect4 {
-  var ps:List[Piece] = List()
+  var ps: Array[Array[Char]] = Array(Array('.','.','.','.','.','.','.'),
+                                     Array('r','.','.','.','.','.','.'),
+                                     Array('r','.','.','.','.','.','.'),
+                                     Array('r','.','.','.','.','.','.'),
+                                     Array('r','.','.','.','.','.','.'),
+                                     Array('r','y','.','.','.','.','.'))
 
-  def play(xp: Int, pieceName: String, ps: List[Piece]): Unit ={
+  def play(xp: Int, pieceName: Char): Unit ={
     var i = 0
 
-    ps :+ new Piece(xp,5,true,pieceName)
+    ps(xp)(5)=pieceName
   }
 }

@@ -1,7 +1,6 @@
 object Chess {
 
-  var board: Array[Array[Char]] = null
-  //Array(Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'), Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('P', '.', '.', '.', '.', '.', '.', '.'), Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'), Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
+  var board: Array[Array[Char]] = Array(Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'), Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('P', '.', '.', '.', '.', '.', '.', '.'), Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'), Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
   val EMPTY = '.'
 
   def isUpper(x: Char): Boolean = x >= 'A' && x <= 'Z'
@@ -135,7 +134,24 @@ object Chess {
     }
     else false
   }
+  def chessPieces(s:Char): Int = s match {
+    case 'k'=> 0;
+    case 'q'=> 1;
+    case 'b'=> 2;
+    case 'n'=> 3;
+    case 'r'=> 4;
+    case 'p'=> 5;
 
+    case 'K'=> 0+6;
+    case 'Q'=> 1+6;
+    case 'B'=> 2+6;
+    case 'N'=> 3+6;
+    case 'R'=> 4+6;
+    case 'P'=> 5+6;
+
+    case  _ => 3;
+
+  }
   def show(a: Array[Array[Char]]): Unit = {
     for(i<- a.indices){
       for(j<- a(0).indices){
