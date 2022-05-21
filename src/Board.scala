@@ -1,5 +1,5 @@
 import Board.{chessButton, xoButton}
-import BoardEngine.state
+import BoardEngine.{checkersDrawer, chessController, chessDrawer, connect4Controller, connect4Drawer, state, ticTacToeController, xoDrawer}
 
 import javax.imageio.ImageIO
 import java.awt.{Color, Dimension, Graphics, Image}
@@ -85,10 +85,10 @@ object Board extends ActionListener{
               if (shape == 0) g.fillOval(x * 64, y * 64, 64, 64)
               else g.fill3DRect(x * 64, y * 64, 64, 64, true)
             }else {
-              if (y==yMax && x<8){
+              if (y==yMax && x<xMax){
                 g.drawString(letters(x).toString,x * 64+32,y * 64+32)
               }
-              else if(x==xMax && y<8) {
+              else if(x==xMax && y<xMax) {
                 g.drawString(numbers(y).toString, x * 64+32, y * 64+32)
 
               }
@@ -106,8 +106,8 @@ object Board extends ActionListener{
               else if (pieces(i)(j)=='o') ind = 1}
 
               else if (game.equals("checkers")) {
-                if (pieces(i)(j)=='x') ind = 0
-              else if (pieces(i)(j)=='o') ind = 1
+                if (pieces(i)(j)=='w') ind = 0
+              else if (pieces(i)(j)=='b') ind = 7
               }
 
               else if(game.equals("connect4")) {
@@ -162,18 +162,23 @@ object Board extends ActionListener{
       if (game.equals("chess")) {
         println("go to chess 4 controller ")
 
-        BoardEngine.chessController(jTextField.getText)
+        BoardEngine.gameEngine(jTextField.getText,chessController,chessDrawer)
       }
 
       else if (game.equals("xo")){
         println("go to xo 4 controller ")
 
-        BoardEngine.ticTacToeController(jTextField.getText)
+        BoardEngine.gameEngine(jTextField.getText,ticTacToeController,xoDrawer)
       }
 
       else if (game.equals("connect4")){
         println("go to connect 4 controller ")
-          BoardEngine.connect4Controller(jTextField.getText)
+        BoardEngine.gameEngine(jTextField.getText,connect4Controller,connect4Drawer)
+
+      }
+      else if (game.equals("checkers")){
+        println("go to connect checkers ")
+        BoardEngine.gameEngine(jTextField.getText,chessController,checkersDrawer)
 
       }
     };
@@ -209,7 +214,7 @@ object Board extends ActionListener{
     }
     if (e.getSource==checkersButton){
       println("in checkersButton")
-    //  BoardEngine.state=Checkers.initialState();
+      BoardEngine.state=Checkers.board;
       frame.setVisible(false)
       frame = new JFrame();
       frame.setSize(500,500)

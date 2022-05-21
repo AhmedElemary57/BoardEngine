@@ -35,11 +35,19 @@ object BoardEngine {
     //the bo
 
   }
-//  def checkersDrawer( ): Unit ={
-//    var b = new Board;
-//    b.draw(8,8,1,1,"checkers",ps)/*,here we should but the shapes 'state to be drawn'*/
-//    //the bo
-//  }
+
+  def checkersDrawer( ): Unit ={
+
+
+
+   Board.draw(8,8,1,1,"checkers",state)
+    /*,here we should but the shapes 'state to be drawn'*/
+
+
+  //the bo
+
+
+ }
 
   def connect4Controller(input: String): Boolean  ={
     val col = input.charAt(0) - 'a'
@@ -73,7 +81,7 @@ object BoardEngine {
       .flatMap(number => List('a', 'b', 'c').map(letter => s"$number$letter")).contains(input)
     if (!validInput) false
     else{
-      val i = input.charAt(0) - '1'  //1a => 00
+      val i = '3'-input.charAt(0)   //1a => 00
       val j = input.charAt(1) - 'a'
       if(state(i)(j).equals('.')) {
         if(isPlayerOne) state(i)(j) = 'x' else state(i)(j) = 'o'
@@ -109,46 +117,60 @@ object BoardEngine {
     case "b" => Chess.validBishopMove(input._1, input._2, input._3, input._4)
   }
 
-  def chessController(input: String): Unit = {
+  def chessController(input: String): Boolean = {
 
     println(s"input is $input")
-    if (!validChesInputRange(input)) return
+    if (!validChesInputRange(input)) return false
     val indices = stateIndices(input)
     Chess.board = state
-    if (((isPlayerOne && state(indices._1)(indices._2).isLower )|| (!isPlayerOne && state(indices._1)(indices._2).isUpper))&& matchPiece(state(indices._1)(indices._2).toString.toLowerCase, indices)){
+
+    if (((isPlayerOne && state(indices._1)(indices._2).isLower )||
+      (!isPlayerOne && state(indices._1)(indices._2).isUpper))&& matchPiece(state(indices._1)(indices._2).toString.toLowerCase, indices)){
       println("valid move")
       Chess.board(indices._3)(indices._4)= Chess.board(indices._1)(indices._2)
       Chess.board(indices._1)(indices._2)='.'
 
       Board.refresh(8,8,1,1,"chess",state)
       isPlayerOne = !isPlayerOne
+      true
 
     }
+    else false
 
   }
 
+
+  def gameEngine(input :String, controller: (String) => Boolean, drawer:()=>Unit): Boolean = {
+    val validMove = controller(input)
+    if(validMove) drawer()
+    validMove
+  }
   def checkersController(input: String): Unit ={
 
+    if( Checkers.play(input) ) {
 
-  }
-  def show(a: Array[Array[String]]): Unit = {
-    for(i<- a.indices){
-      for(j<- a(0).indices){
-        print(" "+a(i)(j))
-      }
-      println()
+  //    state(Checkers.converter(input.charAt(2)))( Checkers.converter(input.charAt(3))) = state(Checkers.converter(input.charAt(0)))(Checkers.converter(input.charAt(1)))
+      //state(Checkers.converter(input.charAt(0)))(Checkers.converter(input.charAt(1)))='.'
+      Board.refresh(8,8,1,1,"checkers",state)
+
     }
+
+    Board.refresh(8,8,1,1,"checkers",state)
   }
+
+
+
+
 
   def main(args: Array[String]): Unit = {
-     Board.initialization()
-      //Board.frame.add(Board.connect4Button)
+    Board.initialization()
+    //Board.frame.add(Board.connect4Button)
 
 
     Board.frame.setVisible(true)
 
 
-
+  }
 //    state = Array(Array("X", "_", "O"), Array("O", "X", "_"), Array("O", "_", "X"))
    /* state = Array(
       Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'),
@@ -165,5 +187,5 @@ object BoardEngine {
 //    connect4Drawer()
     val x =chessController("8a 4a")
     println(x)*/
-  }
+
 }
