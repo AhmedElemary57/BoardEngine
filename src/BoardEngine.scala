@@ -28,23 +28,23 @@ object BoardEngine {
     selectDrawer(i)
   }
 
-  def xoDrawer(): Unit ={
-   Board.draw(3,3,1,0,"xo",state)
+  def xoDrawer(): Unit = {
+    Board.refresh(3,3,1,0,"xo", state)
   }
 
-  def chessDrawer( ): Unit ={
-    Board.draw(8,8,1,1,"chess",state)
+  def chessDrawer(): Unit = {
+    Board.refresh(8,8,1,1,"chess", state)
   }
 
-  def connect4Drawer( ): Unit ={
-    Board.draw(7,6,0,0,"connect4", state)
+  def connect4Drawer(): Unit = {
+    Board.refresh(7,6,0,0,"connect4", state)
   }
 
-  def checkersDrawer( ): Unit ={
-   Board.draw(8,8,1,1,"checkers",state)
+  def checkersDrawer(): Unit = {
+    Board.refresh(8,8,1,1,"checkers", state)
   }
 
-  def connect4Controller(input: String): Boolean  ={
+  def connect4Controller(input: String): Boolean = {
     val col = input.charAt(0) - 'a'
     var colSize = 0
     var flag = 0
@@ -62,7 +62,6 @@ object BoardEngine {
     else {
       state(state.length-1-colSize)(col) = piece
       println("add to array "+piece)
-      Board.refresh(7,6,0,0,"connect4", state)
       isPlayerOne = !isPlayerOne
       true
     }
@@ -77,7 +76,6 @@ object BoardEngine {
       val j = input.charAt(1) - 'a'
       if(state(i)(j).equals('.')) {
         if(isPlayerOne) state(i)(j) = 'x' else state(i)(j) = 'o'
-        Board.refresh(3,3,1,0,"xo",state)
         isPlayerOne = !isPlayerOne
         true
       }
@@ -121,8 +119,6 @@ object BoardEngine {
       println("valid move")
       Chess.board(indices._3)(indices._4) = Chess.board(indices._1)(indices._2)
       Chess.board(indices._1)(indices._2) ='.'
-
-      Board.refresh(8,8,1,1,"chess",state)
       isPlayerOne = !isPlayerOne
       true
     }
@@ -133,17 +129,11 @@ object BoardEngine {
     val indices = stateIndices(input)
     val validMove = Checkers.play(indices)
     if(validMove) isPlayerOne = !isPlayerOne
-    if( validMove ) {
-      Board.refresh(8,8,1,1,"checkers",state)
-    }
-
-    Board.refresh(8,8,1,1,"checkers",state)
     validMove
   }
 
   def main(args: Array[String]): Unit = {
     Board.initialization()
-    //Board.frame.add(Board.connect4Button)
     Board.frame.setVisible(true)
   }
 }
