@@ -1,6 +1,7 @@
 object Checkers {
 
-  val board: Array[Array[Char]] = Array(Array('b', '.', 'b', '.', 'b', '.', 'b', '.'),
+  val board: Array[Array[Char]] = Array(
+    Array('b', '.', 'b', '.', 'b', '.', 'b', '.'),
     Array('.', 'b', '.', 'b', '.', 'b', '.', 'b'),
     Array('b', '.', 'b', '.', 'b', '.', 'b', '.'),
     Array('.', '.', '.', '.', '.', '.', '.', '.'),
@@ -10,111 +11,125 @@ object Checkers {
     Array('.', 'w', '.', 'w', '.', 'w', '.', 'w'))
 
   private var role = 0
-  private var neccesaryWhite = false
-  private var neccesaryBlack = false
-  private var neccesaryXPOS_forWhite = 10
-  private var neccesaryYPOS_forWhite = 10
-  private var neccesaryXPOS_forBlack = 10
-  private var neccesaryYPOS_forBlack = 10
-  ///////////////////////////////////////////////////////////////////////////////
+  private var necessaryWhite = false
+  private var necessaryBlack = false
+  private var necessaryXPOS_forWhite = 10
+  private var necessaryYPOS_forWhite = 10
+  private var necessaryXPOS_forBlack = 10
+  private var necessaryYPOS_forBlack = 10
+
   private var optionalneccesaryWhite = false
   private var optionalneccesaryBlack = false
   private var optionalneccesaryXPOS_forWhite = 10
   private var optionalneccesaryYPOS_forWhite = 10
   private var optionalneccesaryXPOS_forBlack = 10
   private var optionalneccesaryYPOS_forBlack = 10
-  ///////////////////////////////////////////////////////////////////////////////////optional
+
   private var mayneccesaryWhite = false
   private var mayneccesaryBlack = false
   private var mayneccesaryXPOS_forWhite = 10
   private var mayneccesaryYPOS_forWhite = 10
   private var mayneccesaryXPOS_forBlack = 10
   private var mayneccesaryYPOS_forBlack = 10
-  ///////////////////////////////////////////////////////////////////////////////////////////////
-  def play(input: String): Boolean = {
-    if (checkRole(role)) {
-      val xPoxFrom = converter(input.charAt(0))
-      val yPoxFrom = converter(input.charAt(1))
-      val xPoxTo = converter(input.charAt(2))
-      val yPoxTo = converter(input.charAt(3))
-      if (xPoxFrom == 10 || yPoxFrom == 10 || xPoxTo == 10 || yPoxTo == 10) return false
-      if (board(xPoxFrom)(yPoxFrom) == 'w' && role == 0) {
-        if (mayneccesaryWhite || neccesaryWhite || optionalneccesaryWhite) if (neccesaryXPOS_forWhite == xPoxFrom) if (validateWhiteKillMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) {
-          neccesaryWhite = false
-          recheckMayNecessaryForBlack()
-          checkNeccesaryForBlack(xPoxTo, yPoxTo) //////////////////////
 
-          //recheck optional
-          recheckoptionalNecessaryForBlack()
-          role = 1
-          return true
+  def play(indices: (Int, Int, Int, Int)): Boolean = { // 1a2b
+    if (checkRole(role)) {
+
+      if (indices._1 == 10 || indices._2 == 10 || indices._3 == 10 || indices._4 == 10) return false
+
+      if (board(indices._1)(indices._2) == 'w' && role == 0) {//white player
+        if (mayneccesaryWhite || necessaryWhite || optionalneccesaryWhite) {
+          if (necessaryXPOS_forWhite == indices._1) {
+            if (validateWhiteKillMove(indices._1, indices._2, indices._3, indices._4)) {
+              necessaryWhite = false
+              recheckMayNecessaryForBlack()
+              checkNeccesaryForBlack(indices._3, indices._4)
+
+              //recheck optional
+              recheckoptionalNecessaryForBlack()
+              role = 1
+              return true
+            }
+            else if (mayneccesaryXPOS_forWhite == indices._1) {
+              if (validateWhiteKillMove(indices._1, indices._2, indices._3, indices._4)) {
+                recheckNecessaryForBlack()
+                mayneccesaryWhite = false
+                checkNeccesaryForBlack(indices._3, indices._4)
+                recheckoptionalNecessaryForBlack()
+                role = 1
+                return true
+              }
+              else if (optionalneccesaryXPOS_forWhite == indices._1) {
+                if (validateWhiteKillMove(indices._1, indices._2, indices._3, indices._4)) {
+                  optionalneccesaryWhite = false
+                  //recheck neccessary and
+                  recheckNecessaryForBlack()
+                  checkNeccesaryForBlack(indices._3, indices._4)
+                  recheckMayNecessaryForBlack()
+                  role = 1
+                  return true
+                }
+              }
+            }
+          }
         }
-        else if (mayneccesaryXPOS_forWhite == xPoxFrom) if (validateWhiteKillMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) {
-          recheckNecessaryForBlack()
-          mayneccesaryWhite = false
-          checkNeccesaryForBlack(xPoxTo, yPoxTo)
-          recheckoptionalNecessaryForBlack()
-          role = 1
-          return true
-        }
-        else if (optionalneccesaryXPOS_forWhite == xPoxFrom) if (validateWhiteKillMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) {
-          optionalneccesaryWhite = false
-          //recheck neccessary and
-          recheckNecessaryForBlack()
-          checkNeccesaryForBlack(xPoxTo, yPoxTo)
-          recheckMayNecessaryForBlack()
-          role = 1
-          return true
-        }
-        if (validateWhiteOriginalMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) { ////////////////////////////////////////////////////////////////
-          val x = board(xPoxFrom)(yPoxFrom)
-          board(xPoxFrom)(yPoxFrom) = board(xPoxTo)(yPoxTo)
-          board(xPoxTo)(yPoxTo) = x
-          /////////////////////////////////////////////////////////
-          checkNeccesaryForBlack(xPoxTo, yPoxTo)
+        if (validateWhiteOriginalMove(indices._1, indices._2, indices._3, indices._4)) {
+          val x = board(indices._1)(indices._2)
+          board(indices._1)(indices._2) = board(indices._3)(indices._4)
+          board(indices._3)(indices._4) = x
+
+          checkNeccesaryForBlack(indices._3, indices._4)
           var ytoSend = 0
-          if (yPoxTo > yPoxFrom) ytoSend = yPoxTo + 2
-          else ytoSend = yPoxTo - 2
-          optionalcheckNeccesaryForBlack(xPoxTo, ytoSend)
+          if (indices._4 > indices._2) ytoSend = indices._4 + 2
+          else ytoSend = indices._4 - 2
+          optionalcheckNeccesaryForBlack(indices._3, ytoSend)
           role = 1
           return true
         }
       }
-      else if (board(xPoxFrom)(yPoxFrom) == 'b' && role == 1) {
-        if (mayneccesaryBlack || neccesaryBlack || optionalneccesaryBlack) if (neccesaryXPOS_forBlack == xPoxFrom) if (validateBlackKillMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) {
-          neccesaryBlack = false
-          recheckMayNecessaryForWhite()
-          checkNeccesaryForWhite(xPoxTo, yPoxTo)
-          recheckoptionalNecessaryForWhite()
-          role = 0
-          return true
+      else if (board(indices._1)(indices._2) == 'b' && role == 1) {
+        if (mayneccesaryBlack || necessaryBlack || optionalneccesaryBlack) {
+          if (necessaryXPOS_forBlack == indices._1) {
+            if (validateBlackKillMove(indices._1, indices._2, indices._3, indices._4)) {
+              necessaryBlack = false
+              recheckMayNecessaryForWhite()
+              checkNeccesaryForWhite(indices._3, indices._4)
+              recheckoptionalNecessaryForWhite()
+              role = 0
+              return true
+            }
+            else if (mayneccesaryXPOS_forBlack == indices._1) {
+              if (validateBlackKillMove(indices._1, indices._2, indices._3, indices._4)) {
+                recheckNecessaryForWhite()
+                checkNeccesaryForWhite(indices._3, indices._4)
+                mayneccesaryBlack = false
+                recheckoptionalNecessaryForWhite()
+                role = 0
+                return true
+              }
+              else if (optionalneccesaryXPOS_forBlack == indices._1) {
+                if (validateBlackKillMove(indices._1, indices._2, indices._3, indices._4)) {
+                  optionalneccesaryBlack = false
+                  recheckNecessaryForWhite()
+                  checkNeccesaryForWhite(indices._3, indices._4)
+                  recheckMayNecessaryForWhite()
+                  role = 0
+                  return true
+               }
+              }
+            }
+          }
         }
-        else if (mayneccesaryXPOS_forBlack == xPoxFrom) if (validateBlackKillMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) {
-          recheckNecessaryForWhite()
-          checkNeccesaryForWhite(xPoxTo, yPoxTo)
-          mayneccesaryBlack = false
-          recheckoptionalNecessaryForWhite()
-          role = 0
-          return true
-        }
-        else if (optionalneccesaryXPOS_forBlack == xPoxFrom) if (validateBlackKillMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) {
-          optionalneccesaryBlack = false
-          recheckNecessaryForWhite()
-          checkNeccesaryForWhite(xPoxTo, yPoxTo)
-          recheckMayNecessaryForWhite()
-          role = 0
-          return true
-        }
-        if (validateBlackOriginalMove(xPoxFrom, yPoxFrom, xPoxTo, yPoxTo)) {
-          val x = board(xPoxFrom)(yPoxFrom)
-          board(xPoxFrom)(yPoxFrom) = board(xPoxTo)(yPoxTo)
-          board(xPoxTo)(yPoxTo) = x
-          checkNeccesaryForWhite(xPoxTo, yPoxTo)
+        if (validateBlackOriginalMove(indices._1, indices._2, indices._3, indices._4)) {
+          val x = board(indices._1)(indices._2)
+          board(indices._1)(indices._2) = board(indices._3)(indices._4)
+          board(indices._3)(indices._4) = x
+          checkNeccesaryForWhite(indices._3, indices._4)
           var ytoSend = 0
-          if (yPoxTo > yPoxFrom) ytoSend = yPoxTo - 2
-          else ytoSend = yPoxTo + 2
-          optionalcheckNeccesaryForBlack(xPoxTo, ytoSend)
-          optionalcheckNeccesaryForWhite(ytoSend, yPoxTo)
+          if (indices._4 > indices._2) ytoSend = indices._4 - 2
+          else ytoSend = indices._4 + 2
+          optionalcheckNeccesaryForBlack(indices._3, ytoSend)
+          optionalcheckNeccesaryForWhite(ytoSend, indices._4)
           role = 0
           return true
         }
@@ -123,7 +138,7 @@ object Checkers {
     false
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////// original move
+  // original move
   def validateWhiteOriginalMove(xPoxFrom: Int, yPoxFrom: Int, xPoxTo: Int, yPoxTo: Int): Boolean = {
     if (xPoxFrom == xPoxTo + 1 && (yPoxFrom == yPoxTo + 1 || yPoxFrom == yPoxTo - 1) && board(xPoxTo)(yPoxTo) == '.') return true
     false
@@ -133,33 +148,30 @@ object Checkers {
     if (xPoxFrom == xPoxTo - 1 && (yPoxFrom == yPoxTo + 1 || yPoxFrom == yPoxTo - 1) && board(xPoxTo)(yPoxTo) == '.') return true
     false
   }
-  //////////////////////////////////////////////////////////////////////////////////////////////////
 
-  ////////////////////////////////////////////////////////////////////////////////////////////// recheck neccesary
+  // recheck neccesary
   private def recheckNecessaryForBlack(): Unit = {
-    if (neccesaryXPOS_forBlack != 10 || neccesaryYPOS_forBlack != 10) if ((board(neccesaryXPOS_forBlack + 1)(neccesaryYPOS_forBlack + 1) == 'w' && board(neccesaryXPOS_forBlack + 2)(neccesaryYPOS_forBlack + 2) == '.') || (board(neccesaryXPOS_forBlack + 1)(neccesaryYPOS_forBlack - 1) == 'w' && board(neccesaryXPOS_forBlack + 2)(neccesaryYPOS_forBlack - 2) == '.')) neccesaryBlack = true
-    else neccesaryBlack = false
+    if (necessaryXPOS_forBlack != 10 || necessaryYPOS_forBlack != 10) if ((board(necessaryXPOS_forBlack + 1)(necessaryYPOS_forBlack + 1) == 'w' && board(necessaryXPOS_forBlack + 2)(necessaryYPOS_forBlack + 2) == '.') || (board(necessaryXPOS_forBlack + 1)(necessaryYPOS_forBlack - 1) == 'w' && board(necessaryXPOS_forBlack + 2)(necessaryYPOS_forBlack - 2) == '.')) necessaryBlack = true
+    else necessaryBlack = false
   }
 
   private def recheckNecessaryForWhite(): Unit = {
-    if (neccesaryXPOS_forWhite != 10 || neccesaryYPOS_forWhite != 10) if ((board(neccesaryXPOS_forWhite - 1)(neccesaryYPOS_forWhite - 1) == 'b' && board(neccesaryXPOS_forWhite - 2)(neccesaryYPOS_forWhite - 2) == '.') || (board(neccesaryXPOS_forWhite - 1)(neccesaryYPOS_forWhite + 1) == 'b' && board(neccesaryXPOS_forWhite - 2)(neccesaryYPOS_forWhite + 2) == '.')) neccesaryWhite = true
-    else neccesaryWhite = false
+    if (necessaryXPOS_forWhite != 10 || necessaryYPOS_forWhite != 10) if ((board(necessaryXPOS_forWhite - 1)(necessaryYPOS_forWhite - 1) == 'b' && board(necessaryXPOS_forWhite - 2)(necessaryYPOS_forWhite - 2) == '.') || (board(necessaryXPOS_forWhite - 1)(necessaryYPOS_forWhite + 1) == 'b' && board(necessaryXPOS_forWhite - 2)(necessaryYPOS_forWhite + 2) == '.')) necessaryWhite = true
+    else necessaryWhite = false
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////////// recheck may neccessary
+  // recheck may neccessary
   private def recheckMayNecessaryForBlack(): Unit = {
     if (mayneccesaryXPOS_forBlack != 10 || mayneccesaryYPOS_forBlack != 10) if ((board(mayneccesaryXPOS_forBlack + 1)(mayneccesaryYPOS_forBlack + 1) == 'w' && board(mayneccesaryXPOS_forBlack + 2)(mayneccesaryYPOS_forBlack + 2) == '.') || (board(mayneccesaryXPOS_forBlack + 1)(mayneccesaryYPOS_forBlack - 1) == 'w' && board(mayneccesaryXPOS_forBlack + 2)(mayneccesaryYPOS_forBlack - 2) == '.')) mayneccesaryBlack = true
     else mayneccesaryBlack = false
   }
+
   private def recheckMayNecessaryForWhite(): Unit = {
     if (mayneccesaryXPOS_forWhite != 10 || mayneccesaryYPOS_forWhite != 10) if ((board(mayneccesaryXPOS_forWhite - 1)(mayneccesaryYPOS_forWhite - 1) == 'b' && board(mayneccesaryXPOS_forWhite - 2)(mayneccesaryYPOS_forWhite - 2) == '.') || (board(mayneccesaryXPOS_forWhite - 1)(mayneccesaryYPOS_forWhite + 1) == 'b' && board(mayneccesaryXPOS_forWhite - 2)(mayneccesaryYPOS_forWhite + 2) == '.')) mayneccesaryWhite = true
     else mayneccesaryWhite = false
   }
 
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////recheck optional
+  // recheck optional
   private def recheckoptionalNecessaryForBlack(): Unit = {
     if (optionalneccesaryXPOS_forBlack != 10 || optionalneccesaryYPOS_forBlack != 10) if ((board(optionalneccesaryXPOS_forBlack + 1)(optionalneccesaryYPOS_forBlack + 1) == 'w' && board(optionalneccesaryXPOS_forBlack + 2)(optionalneccesaryYPOS_forBlack + 2) == '.') || (board(optionalneccesaryXPOS_forBlack + 1)(optionalneccesaryYPOS_forBlack - 1) == 'w' && board(optionalneccesaryXPOS_forBlack + 2)(optionalneccesaryYPOS_forBlack - 2) == '.')) optionalneccesaryBlack = true
     else optionalneccesaryBlack = false
@@ -169,58 +181,55 @@ object Checkers {
     if (optionalneccesaryXPOS_forWhite != 10 || optionalneccesaryYPOS_forWhite != 10) if ((board(optionalneccesaryXPOS_forWhite - 1)(optionalneccesaryYPOS_forWhite - 1) == 'b' && board(optionalneccesaryXPOS_forWhite - 2)(optionalneccesaryYPOS_forWhite - 2) == '.') || (board(optionalneccesaryXPOS_forWhite - 1)(optionalneccesaryYPOS_forWhite + 1) == 'b' && board(optionalneccesaryXPOS_forWhite - 2)(optionalneccesaryYPOS_forWhite + 2) == '.')) optionalneccesaryWhite = true
     else optionalneccesaryWhite = false
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////
   private def checkNeccesaryForBlack(curX_ofWhite: Int, curY_ofWhite: Int): Unit = {
-    neccesaryBlack = false
+    necessaryBlack = false
     var enter = false
     if (board(curX_ofWhite - 1)(curY_ofWhite - 1) == 'b' && board(curX_ofWhite + 1)(curY_ofWhite + 1) == '.') {
-      neccesaryBlack = true
-      neccesaryXPOS_forBlack = curX_ofWhite - 1
-      neccesaryYPOS_forBlack = curY_ofWhite - 1
+      necessaryBlack = true
+      necessaryXPOS_forBlack = curX_ofWhite - 1
+      necessaryYPOS_forBlack = curY_ofWhite - 1
       enter = true
     }
     if (board(curX_ofWhite - 1)(curY_ofWhite + 1) == 'b' && board(curX_ofWhite + 1)(curY_ofWhite - 1) == '.') {
-      neccesaryBlack = true
+      necessaryBlack = true
       if (enter) {
         mayneccesaryXPOS_forBlack = curX_ofWhite - 1
         mayneccesaryYPOS_forBlack = curY_ofWhite + 1
         mayneccesaryBlack = true
       }
       else {
-        neccesaryXPOS_forBlack = curX_ofWhite - 1
-        neccesaryYPOS_forBlack = curY_ofWhite + 1
+        necessaryXPOS_forBlack = curX_ofWhite - 1
+        necessaryYPOS_forBlack = curY_ofWhite + 1
         mayneccesaryBlack = false
       }
     }
   }
 
   private def checkNeccesaryForWhite(curX_ofBlack: Int, curY_ofBlack: Int): Unit = {
-    neccesaryWhite = false
+    necessaryWhite = false
     var enter = false
     if (board(curX_ofBlack + 1)(curY_ofBlack + 1) == 'w' && board(curX_ofBlack - 1)(curY_ofBlack - 1) == '.') {
-      neccesaryWhite = true
-      neccesaryXPOS_forWhite = curX_ofBlack + 1
-      neccesaryYPOS_forWhite = curY_ofBlack + 1
+      necessaryWhite = true
+      necessaryXPOS_forWhite = curX_ofBlack + 1
+      necessaryYPOS_forWhite = curY_ofBlack + 1
       enter = true
     }
     if (board(curX_ofBlack + 1)(curY_ofBlack - 1) == 'w' && board(curX_ofBlack - 1)(curY_ofBlack + 1) == '.') {
-      neccesaryWhite = true
+      necessaryWhite = true
       if (enter) {
         mayneccesaryXPOS_forWhite = curX_ofBlack + 1
         mayneccesaryYPOS_forWhite = curY_ofBlack - 1
         mayneccesaryWhite = true
       }
       else {
-        neccesaryXPOS_forWhite = curX_ofBlack + 1
-        neccesaryYPOS_forWhite = curY_ofBlack - 1
+        necessaryXPOS_forWhite = curX_ofBlack + 1
+        necessaryYPOS_forWhite = curY_ofBlack - 1
         mayneccesaryWhite = false
       }
     }
   }
 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //  Defender leaves
   private def optionalcheckNeccesaryForBlack(curX_ofWhite: Int, curY_ofWhite: Int): Unit = {
     if (board(curX_ofWhite - 1)(curY_ofWhite - 1) == 'b' && board(curX_ofWhite + 1)(curY_ofWhite + 1) == '.') {
@@ -249,8 +258,6 @@ object Checkers {
     }
     else optionalneccesaryWhite = false
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
   def validateWhiteKillMove(xPoxFrom: Int, yPoxFrom: Int, xPoxTo: Int, yPoxTo: Int): Boolean = {
     if (yPoxFrom == yPoxTo - 2 && xPoxFrom == xPoxTo + 2 && (board(xPoxFrom - 1)(yPoxFrom + 1) == 'b')) {
@@ -290,30 +297,23 @@ object Checkers {
 
   private def checkRole(r: Int) = r == role
 
-   def converter(x: Char) =
-     if (x == 'h') 7
-  else if (x == 'g') 6
-  else if (x == 'f') 5
-  else if (x == 'e') 4
-  else if (x == 'd') 3
-  else if (x == 'c') 2
-  else if (x == 'b') 1
-  else if (x == 'a') 0
-  else if (x == '1') 7
-  else if (x == '2') 6
-  else if (x == '3') 5
-  else if (x == '4') 4
-  else if (x == '5') 3
-  else if (x == '6') 2
-  else if (x == '7') 1
-  else if (x == '8') 0
-  else 10
-
-
-
-
-
-
-
-
+  def converter(x: Char): Int = x match {
+    case 'h' => 7
+    case 'g' => 6
+    case 'f' => 5
+    case 'e' => 4
+    case 'd' => 3
+    case 'c' => 2
+    case 'b' => 1
+    case 'a' => 0
+    case '1' => 7
+    case '2' => 6
+    case '3' => 5
+    case '4' => 4
+    case '5' => 3
+    case '6' => 2
+    case '7' => 1
+    case '8' => 0
+    case _ => 10
+  }
 }

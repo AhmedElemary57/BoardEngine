@@ -1,15 +1,34 @@
 object Chess {
 
-  var board: Array[Array[Char]] = Array(Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'), Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('P', '.', '.', '.', '.', '.', '.', '.'), Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'), Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
+  var board: Array[Array[Char]] = Array(
+    Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'),
+    Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'),
+    Array('.', '.', '.', '.', '.', '.', '.', '.'),
+    Array('.', '.', '.', '.', '.', '.', '.', '.'),
+    Array('.', '.', '.', '.', '.', '.', '.', '.'),
+    Array('P', '.', '.', '.', '.', '.', '.', '.'),
+    Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'),
+    Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
+
   val EMPTY = '.'
 
   def isUpper(x: Char): Boolean = x >= 'A' && x <= 'Z'
 
   def isLower(x: Char): Boolean = x >= 'a' && x <= 'z'
+
   def initialState(): Array[Array[Char]] ={
-    board = Array(Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'), Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('.', '.', '.', '.', '.', '.', '.', '.'), Array('P', '.', '.', '.', '.', '.', '.', '.'), Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'), Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
+    board = Array(
+      Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'),
+      Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'),
+      Array('.', '.', '.', '.', '.', '.', '.', '.'),
+      Array('.', '.', '.', '.', '.', '.', '.', '.'),
+      Array('.', '.', '.', '.', '.', '.', '.', '.'),
+      Array('P', '.', '.', '.', '.', '.', '.', '.'),
+      Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'),
+      Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
     board
   }
+
   def changeType(x: Char, y: Char, n: Int): Boolean = {
     if (isLower(x) && n == 0) return isUpper(y)
     else if (isLower(x) && n == 1) return isLower(y)
@@ -137,6 +156,7 @@ object Chess {
     }
     else false
   }
+
   def chessPieces(s:Char): Int = s match {
     case 'k'=> 0;
     case 'q'=> 1;
@@ -155,6 +175,7 @@ object Chess {
     case  _ => 3;
 
   }
+
   def show(a: Array[Array[Char]]): Unit = {
     for(i<- a.indices){
       for(j<- a(0).indices){
