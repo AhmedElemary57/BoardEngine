@@ -6,7 +6,10 @@ object BoardEngine {
 
   def gameEngine(input :String, controller: (String) => Boolean, drawer:()=>Unit): Boolean = {
     val validMove = controller(input)
-    if(validMove) drawer()
+    if(validMove){
+      drawer()
+      isPlayerOne = !isPlayerOne
+    }
     validMove
   }
 
@@ -40,11 +43,25 @@ object BoardEngine {
     Board.refresh(7,6,0,0,"connect4", state)
   }
 
-  def checkersDrawer(): Unit = {
-    Board.refresh(8,8,1,1,"checkers", state)
+  def checkersDrawer( ): Unit ={
+
+
+
+   Board.refresh(8,8,1,1,"checkers",state)
+    /*,here we should but the shapes 'state to be drawn'*/
+
+
+  //the bo
+
+
+ }
+  def validConnect4InputRange(input: String): Boolean = {
+     List('a', 'b', 'c', 'd', 'e', 'f', 'g').contains(input.charAt(0))
   }
 
+
   def connect4Controller(input: String): Boolean = {
+    if (input.length>1 || !validConnect4InputRange(input)) return false;
     val col = input.charAt(0) - 'a'
     var colSize = 0
     var flag = 0
@@ -61,8 +78,6 @@ object BoardEngine {
     if (colSize >= 6) false
     else {
       state(state.length-1-colSize)(col) = piece
-      println("add to array "+piece)
-      isPlayerOne = !isPlayerOne
       true
     }
   }
@@ -76,7 +91,6 @@ object BoardEngine {
       val j = input.charAt(1) - 'a'
       if(state(i)(j).equals('.')) {
         if(isPlayerOne) state(i)(j) = 'x' else state(i)(j) = 'o'
-        isPlayerOne = !isPlayerOne
         true
       }
       else false //tell drawer do not draw this state
@@ -116,24 +130,24 @@ object BoardEngine {
     if ( ((isPlayerOne && state(indices._1)(indices._2).isLower) ||
       (!isPlayerOne && state(indices._1)(indices._2).isUpper)) &&
       matchPiece(state(indices._1)(indices._2).toString.toLowerCase, indices)) {
-      println("valid move")
       Chess.board(indices._3)(indices._4) = Chess.board(indices._1)(indices._2)
       Chess.board(indices._1)(indices._2) ='.'
-      isPlayerOne = !isPlayerOne
       true
     }
     else false
   }
 
   def checkersController(input: String): Boolean ={
+
+    if (!validChesInputRange(input)) return false
     val indices = stateIndices(input)
-    val validMove = Checkers.play(indices)
-    if(validMove) isPlayerOne = !isPlayerOne
+    val validMove = Checkers.play(indices,isPlayerOne)
     validMove
   }
 
   def main(args: Array[String]): Unit = {
+
     Board.initialization()
-    Board.frame.setVisible(true)
+    Board.frame2.setVisible(true)
   }
 }

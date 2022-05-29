@@ -1,5 +1,5 @@
 import Board.{chessButton, xoButton}
-import BoardEngine.{checkersDrawer, chessController, chessDrawer, connect4Controller, connect4Drawer, state, ticTacToeController, xoDrawer}
+import BoardEngine.{checkersController, checkersDrawer, chessController, chessDrawer, connect4Controller, connect4Drawer, state, ticTacToeController, xoDrawer}
 
 import javax.imageio.ImageIO
 import java.awt.{Color, Dimension, Graphics, Image}
@@ -9,11 +9,11 @@ import java.io.File
 import javax.swing.{JButton, JFrame, JPanel, JTextField}
 
 object Board extends ActionListener{
-  var game:String = "chess";
+  var game:String = " ";
   var flag=0;
 
-  var frame = new JFrame("Game")
-  frame.setSize(512,512)
+  var frame2 = new JFrame("Game")
+  frame2.setSize(512,512)
 
   var submitButton = new JButton("Submit")
   var chessButton = new JButton("Chess")
@@ -28,17 +28,17 @@ object Board extends ActionListener{
   connect4Button.addActionListener(this)
   checkersButton.setBounds(128,340,192,64);
   checkersButton.addActionListener(this)
-  frame.add(chessButton)
-  frame.add(xoButton)
-  frame.add(connect4Button)
-  frame.add(checkersButton)
+  frame2.add(chessButton)
+  frame2.add(xoButton)
+  frame2.add(connect4Button)
+  frame2.add(checkersButton)
   def initialization(): Unit ={
-    frame.setLayout(null);
-
+    frame2.setLayout(null);
+    frame2.setVisible(true)
 
 
   }
-
+  var frame=new JFrame("new");
 
   val jTextField = new JTextField
   jTextField.setPreferredSize(new Dimension(50, 40))
@@ -89,11 +89,10 @@ object Board extends ActionListener{
                 g.drawString(letters(x).toString,x * 64+32,y * 64+32)
               }
               else if(x==xMax && y<xMax) {
-                g.drawString(numbers(y).toString, x * 64+32, y * 64+32)
+                g.drawString(numbers(y+(8-xMax)).toString, x * 64+32, y * 64+32)
 
               }
             }
-
           }
         }
 
@@ -108,6 +107,8 @@ object Board extends ActionListener{
               else if (game.equals("checkers")) {
                 if (pieces(i)(j)=='w') ind = 0
               else if (pieces(i)(j)=='b') ind = 7
+                else if (pieces(i)(j)=='B') ind = 3
+                else if (pieces(i)(j)=='W') ind=2
               }
 
               else if(game.equals("connect4")) {
@@ -127,7 +128,7 @@ object Board extends ActionListener{
 
     if (flag==0) {
 
-      pn.setSize(xMax*64,yMax*64)
+      pn.setSize(xMax*20,yMax*64)
       frame.add(pn)
       jTextField.setBounds(10,64*(yMax+1)+5,63*xMax,50)
       submitButton.setBounds(64*xMax,64*(yMax+1)+5,80,50)
@@ -137,9 +138,7 @@ object Board extends ActionListener{
 
       pn.add(submitButton)
       pn.add(jTextField)
-      pn.setVisible(true)
       frame.setDefaultCloseOperation(3)
-
       frame.setVisible(true)
 
       flag=1
@@ -178,15 +177,14 @@ object Board extends ActionListener{
       }
       else if (game.equals("checkers")){
         println("go to connect checkers ")
-        BoardEngine.gameEngine(jTextField.getText,chessController,checkersDrawer)
+        BoardEngine.gameEngine(jTextField.getText,checkersController,checkersDrawer)
 
       }
     };
     if (e.getSource==chessButton){
       println("in chess button")
       BoardEngine.state=Chess.initialState();
-      frame.setVisible(false)
-      frame = new JFrame();
+      frame2.setVisible(false)
       frame.setSize(700,700)
       refresh(8,8,1,1,"chess",state)
 
@@ -195,9 +193,8 @@ object Board extends ActionListener{
     if (e.getSource==xoButton){
       println("in xo")
       BoardEngine.state=XO.initialState();
-      frame.setVisible(false)
+      frame2.setVisible(false)
 
-      frame = new JFrame();
       frame.setSize(500,500)
       refresh(3,3,1,0,"xo",state)
 
@@ -205,9 +202,8 @@ object Board extends ActionListener{
     if (e.getSource==connect4Button){
       println("in connect 4")
       BoardEngine.state=Connect4.initialState();
-      frame.setVisible(false)
+      frame2.setVisible(false)
 
-      frame = new JFrame();
       frame.setSize(500,500)
       refresh(7,6,0,0,"connect4", state)
 
@@ -215,9 +211,8 @@ object Board extends ActionListener{
     if (e.getSource==checkersButton){
       println("in checkersButton")
       BoardEngine.state=Checkers.board;
-      frame.setVisible(false)
-      frame = new JFrame();
-      frame.setSize(500,500)
+      frame2.setVisible(false)
+      frame.setSize(700,700)
       refresh(8,8,1,1,"checkers",state)
 
     }

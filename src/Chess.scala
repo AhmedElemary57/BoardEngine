@@ -18,12 +18,12 @@ object Chess {
 
   def initialState(): Array[Array[Char]] ={
     board = Array(
-      Array('R', '.', '.', 'Q', 'K', 'B', 'N', 'R'),
-      Array('.', 'P', 'P', 'P', 'P', 'P', 'P', 'P'),
+      Array('R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'),
+      Array('P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'),
       Array('.', '.', '.', '.', '.', '.', '.', '.'),
       Array('.', '.', '.', '.', '.', '.', '.', '.'),
       Array('.', '.', '.', '.', '.', '.', '.', '.'),
-      Array('P', '.', '.', '.', '.', '.', '.', '.'),
+      Array('.', '.', '.', '.', '.', '.', '.', '.'),
       Array('p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'),
       Array('r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'))
     board
